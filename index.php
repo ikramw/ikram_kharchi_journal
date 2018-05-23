@@ -110,7 +110,7 @@
       </div>
     </section>
   
-  <script src="scripts/main.js"></script>
+  <script src="main.js"></script>
 </body>
 
 </html>
