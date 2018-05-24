@@ -92,7 +92,7 @@
       <section class="create-entry-wrapper" id="create-entry-wrapper">
         <div class="create-entry">
           <h1>Create post</h1>
-          <form>
+          <form './partials/post_entry.php' method='POST'>
             <input type="text" placeholder="Title" name="title" id="post-title" required>
             <textarea name="content" maxlength="1000" id="post-content" required></textarea>
             <br/>
