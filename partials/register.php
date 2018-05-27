@@ -1,6 +1,6 @@
 
 <?php
-
+require_once 'session_start.php';
 require_once 'database.php';
 
 $hashed = password_hash($_POST["password"], PASSWORD_DEFAULT);
