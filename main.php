@@ -1,27 +1,8 @@
 <?php   require_once "partials/header.php"; 
         require_once "classes/entry.php";
-        require_once 'partials/database.php';
-
-        
-
-        if(isset($_GET['edit'])){
-            $id = $_GET['edit'];
-            $edit_state = true;
-            $_SESSION['entryID'] = $_GET['edit'];
-            
-            $statement = $pdo->prepare("SELECT * FROM entries WHERE entryID= :entryID ORDER BY createdAt ASC");
-            $statement->execute([
-                "entryID" => $_GET['edit']
-            ]);
-
-            $record = $statement->fetch();
-            $date = explode(" ", $record["createdAt"]);
-
-        }else{
-            $edit_state = false;
-            $record['title'] = "";
-            $record['content'] = "";    
-        }
+        require_once 'partials/database.php'; 
+        require_once 'partials/timeout.php';     
+       
 
     ?>
 
@@ -49,30 +30,25 @@
         <form class="form" action='./partials/get_all_entries.php' method='POST'>
 
             <label for="journal_title" >Title</label> <!-- Title -->
-            <input type="text" name ="journal_title" value= "<?php echo $record['title'] ?>" 
+            <input type="text" name ="journal_title" value= "" 
                     id="journal_title"  
                     placeholder="Journal Title.." required autofocus> <!-- Title -->
             
             <label for="journal_area" >Journal:</label>  <!-- Journal annotation -->
             <textarea  name="journal_area" id="journal_area" 
-                    placeholder="Write you journal here.." required autofocus><?php echo $record['content'] ?></textarea>  <!-- Journal annotation -->
+                    placeholder="Write you journal here.." required autofocus></textarea>  <!-- Journal annotation -->
 
             <label for="journal_date" >Date:</label>  <!-- Date -->
             <input type="date" name="journal_date" value="<?php echo $date[0]?>" 
                     placeholder="yyyy/mm/dd" required autofocus/>  <!-- Date -->
 
             <div class="signin_btn"> <!-- Save/Logout button -->
-                <button id="logout"type="button">
+                <button id="logout"class="submit-button" type="button">
                     <a href='partials/logout.php'>Logout here</a>
                 </button>    
-
-                <?php if($edit_state == false): ?>
-                    <input  name="save" value="Save" type="submit">
-                <?php else: ?>
-                    <input name="update" value="Update" type="submit">
-                <?php endif ?>
-
-                   
+              
+                <input class="submit-button" name="save" value="Save" type="submit">             
+                  
                 
             </div> <!-- Save/Logout button -->
             
@@ -103,13 +79,20 @@
                    <div class="form">
                       <h2><?= $entry['title']; ?></h2>
                       <p><?= $entry['content']; ?></p>
-                      <form action="partials/delete_post.php" method="post">
+                      <form action="partials/delete_entry.php" method="post">
                          <input type="hidden" name="entry-id" value="<?= $entry['entryID']; ?>">
                          <div class="button-div">
-                            <div><button class="change-delete-button" type="submit" name="delete">Delete</button></div>
+                            <div><button class="submit-button" type="submit" name="delete">Delete</button></div>
                       </form>
-                      <div><a class="change-delete-button" href="partials/edit_page.php?postID=<?=$entry['entryID']?>">Edit</a></div>
+                      
+                      <div><a class="submit-button"  href="partials/edit_page.php?postID=<?=$entry['entryID']?>">Edit</a></div>
                       </div>
+                      <form action="partials/edit_page.php?postID=<?=$entry['entryID']?>" method="post">
+                         <input type="hidden" name="entry-id" value="<?= $entry['entryID']; ?>">
+                         <div class="button-div">
+                            
+                      </form>
+                      
                    </div>
                 </div>
                 <?php 
